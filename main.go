@@ -4,10 +4,10 @@ import (
 	"log"
 	"sync"
 
-	"github.com/FullKernelPanic/f1-telemetry/datasource"
-	"github.com/FullKernelPanic/f1-telemetry/listener"
-	"github.com/FullKernelPanic/f1-telemetry/logger"
-	"github.com/FullKernelPanic/f1-telemetry/web"
+	"f1telemetry/src/datasource"
+	"f1telemetry/src/listener"
+	"f1telemetry/src/logger"
+	"f1telemetry/src/web"
 )
 
 var wg sync.WaitGroup

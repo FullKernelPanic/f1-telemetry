@@ -1,6 +1,7 @@
 package web
 
 import (
+	"f1telemetry/resources"
 	"log"
 	"math/rand"
 	"net/http"
@@ -20,15 +21,17 @@ func (w *Server) ListenAndServe(port string) {
 
 func CreateServer() *Server {
 	myhttp := http.NewServeMux()
-
-	fs := http.FileServer(http.Dir("../client/dist"))
-
-	myhttp.Handle("/", http.StripPrefix("", fs))
+	myhttp.HandleFunc("/", homeHandler)
 
 	ws := Server{myhttp, make([]socketReader, 0), rand.Intn(100)}
+
 	myhttp.HandleFunc("/socket", ws.socketReaderCreate)
 
 	return &ws
+}
+
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(resources.IndexHtml()))
 }
 
 var upgrader = websocket.Upgrader{

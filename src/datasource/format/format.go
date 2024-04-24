@@ -3,8 +3,8 @@ package format
 import (
 	"log"
 
-	"github.com/FullKernelPanic/f1-telemetry/datasource/format/f12021"
-	"github.com/FullKernelPanic/f1-telemetry/listener"
+	"f1telemetry/src/datasource/format/f12021"
+	"f1telemetry/src/listener"
 )
 
 func MapData(buf []byte, gateway listener.PacketGateway) {

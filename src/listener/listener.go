@@ -5,55 +5,55 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/FullKernelPanic/f1-telemetry/domain"
-	"github.com/FullKernelPanic/f1-telemetry/domain/data"
+	"f1telemetry/src/domain"
+	"f1telemetry/src/domain/data"
 )
 
-func NewListener(b domain.Broadcaster) listener {
-	return listener{b}
+func NewListener(b domain.Broadcaster) Listener {
+	return Listener{b}
 }
 
-type listener struct {
+type Listener struct {
 	broadcaster domain.Broadcaster
 }
 
-func (l listener) OnSession(data *data.Session) {
+func (l Listener) OnSession(data *data.Session) {
 	l.broadcast("session", data)
 }
 
-func (l listener) OnButton(data *data.Button) {
+func (l Listener) OnButton(data *data.Button) {
 	l.broadcast("button", data)
 }
 
-func (l listener) OnParticipants(data *data.Participants) {
+func (l Listener) OnParticipants(data *data.Participants) {
 	l.broadcast("participants", data)
 }
 
-func (l listener) OnCarSetupData(data *data.CarSetups) {
+func (l Listener) OnCarSetupData(data *data.CarSetups) {
 	l.broadcast("carSetup", data)
 }
 
-func (l listener) OnLapData(data *data.LapDatas) {
+func (l Listener) OnLapData(data *data.LapDatas) {
 	l.broadcast("lapData", data)
 }
 
-func (l listener) OnMotionData(data *data.MotionData) {
+func (l Listener) OnMotionData(data *data.MotionData) {
 	l.broadcast("motion", data)
 }
 
-func (l listener) OnTelemetryData(data *data.Telemetry) {
+func (l Listener) OnTelemetryData(data *data.Telemetry) {
 	l.broadcast("telemetry", data)
 }
 
-func (l listener) OnSessionHistory(data *data.SessionHistory) {
+func (l Listener) OnSessionHistory(data *data.SessionHistory) {
 	l.broadcast("sessionHistory", data)
 }
 
-func (l listener) OnCarDamage(data data.CarDamages) {
+func (l Listener) OnCarDamage(data data.CarDamages) {
 	l.broadcast("carDamage", data)
 }
 
-func (l listener) broadcast(messageType string, data interface{}) {
+func (l Listener) broadcast(messageType string, data interface{}) {
 	message, err := json.Marshal(JsonDataFormat{messageType, data})
 
 	if err != nil {

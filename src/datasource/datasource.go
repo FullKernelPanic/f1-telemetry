@@ -3,8 +3,8 @@ package datasource
 import (
 	"log"
 
-	"github.com/FullKernelPanic/f1-telemetry/datasource/format"
-	"github.com/FullKernelPanic/f1-telemetry/listener"
+	"f1telemetry/src/datasource/format"
+	"f1telemetry/src/listener"
 )
 
 func NewDataSource(gateway listener.PacketGateway) DataSource {

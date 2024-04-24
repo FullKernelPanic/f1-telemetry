@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/FullKernelPanic/f1-telemetry/domain/data"
-	"github.com/FullKernelPanic/f1-telemetry/listener"
+	"f1telemetry/src/domain/data"
+	"f1telemetry/src/listener"
 )
 
 func MapBytes(b []byte, gateway listener.PacketGateway) bool {
