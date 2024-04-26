@@ -1,15 +1,9 @@
 # f1-telemetry
 
-## Server
-On Windows dev build (git bash)
-````
-cd server
-go build main.go && ./main.exe
-````
+## Run application
+`go run main.go`
 
-## Client
 
-````
-cd client
-npm run watch
-````
+## Build application
+`go build main.go`
+
