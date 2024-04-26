@@ -48,7 +48,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(200)
 
-	err2 := t.ExecuteTemplate(w, "index.gohtml", WebParams{IpAddress: util.IpAddress(), UdpPort: ":027777"})
+	err2 := t.ExecuteTemplate(w, "index.gohtml", WebParams{IpAddress: util.IpAddress(), UdpPort: ":20777"})
 
 	if err2 != nil {
 		log.Fatalln(err2)
