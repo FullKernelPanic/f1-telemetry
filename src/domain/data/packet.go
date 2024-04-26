@@ -12,6 +12,12 @@ type Session struct {
 	GamePaused      bool           `json:"isGamePaused"`
 }
 
+type StartLight struct {
+	NumberOfLights uint8 `json:"NumberOfLights"`
+}
+type LobbyInfo struct {
+}
+
 /*
 	type PacketSessionData struct {
 		SessionTimeLeft      uint16          `json:"m_sessionTimeLeft"`

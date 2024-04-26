@@ -48,7 +48,7 @@ type PacketSessionData struct {
 	DynamicRacingLineType  uint8  `json:"m_dynamicRacingLineType"`  // 0 = 2D, 1 = 3D
 }
 
-func (p *PacketSessionData) PacketHeader() Header {
+func (p PacketSessionData) PacketHeader() Header {
 	return &p.Header
 }
 

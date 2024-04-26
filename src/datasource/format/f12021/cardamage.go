@@ -27,6 +27,6 @@ type CarDamageData struct {
 	EngineTCWear         uint8      `json:"m_engineTCWear"`         // Engine wear TC (percentage)
 }
 
-func (p *PacketCarDamageData) PacketHeader() Header {
+func (p PacketCarDamageData) PacketHeader() Header {
 	return &p.Header
 }

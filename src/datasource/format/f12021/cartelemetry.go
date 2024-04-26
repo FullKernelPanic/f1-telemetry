@@ -8,7 +8,7 @@ type PacketCarTelemetryData struct {
 	SuggestedGear                int8                 `json:"m_suggestedGear"`                // Suggested gear for the player (1-8), 0 if no gear suggested
 }
 
-func (p *PacketCarTelemetryData) PacketHeader() Header {
+func (p PacketCarTelemetryData) PacketHeader() Header {
 	return &p.Header
 }
 

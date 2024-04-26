@@ -2,9 +2,12 @@ package web
 
 import (
 	"f1telemetry/resources"
+	"f1telemetry/src/util"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
+	"text/template"
 
 	"github.com/gorilla/websocket"
 )
@@ -22,6 +25,7 @@ func (w *Server) ListenAndServe(port string) {
 func CreateServer() *Server {
 	myhttp := http.NewServeMux()
 	myhttp.HandleFunc("/", homeHandler)
+	myhttp.HandleFunc("/favicon.ico", iconHandler)
 
 	ws := Server{myhttp, make([]socketReader, 0), rand.Intn(100)}
 
@@ -30,8 +34,26 @@ func CreateServer() *Server {
 	return &ws
 }
 
+func iconHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(resources.IndexHtml()))
+	t, err := template.New("index.html").ParseFS(resources.Htmls(), "html/*.gohtml")
+
+	if err != nil {
+		log.Fatal(err.Error())
+		return
+	}
+
+	w.WriteHeader(200)
+
+	err2 := t.ExecuteTemplate(w, "index.gohtml", WebParams{IpAddress: util.IpAddress(), UdpPort: ":027777"})
+
+	if err2 != nil {
+		log.Fatalln(err2)
+		return
+	}
 }
 
 var upgrader = websocket.Upgrader{
@@ -103,4 +125,9 @@ func (ws *Server) Broadcast(data []byte) {
 */
 func (i *socketReader) writeMsg(data []byte) {
 	i.con.WriteMessage(websocket.TextMessage, data)
+}
+
+type WebParams struct {
+	IpAddress net.IP
+	UdpPort   string
 }

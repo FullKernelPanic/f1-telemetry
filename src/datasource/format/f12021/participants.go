@@ -6,7 +6,7 @@ type PacketParticipantsData struct {
 	ParticipantData [22]ParticipantData `json:"m_participants"`
 }
 
-func (p *PacketParticipantsData) PacketHeader() Header {
+func (p PacketParticipantsData) PacketHeader() Header {
 	return &p.Header
 }
 

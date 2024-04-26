@@ -6,7 +6,7 @@ type PacketLapData struct {
 	LapData [22]LapData `json:"m_lapData"` // Lap data for all cars on track
 }
 
-func (p *PacketLapData) PacketHeader() Header {
+func (p PacketLapData) PacketHeader() Header {
 	return &p.Header
 }
 

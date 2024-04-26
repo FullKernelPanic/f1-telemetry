@@ -13,7 +13,7 @@ type PacketSessionHistoryData struct {
 	TyreStintHistoryData [8]TyreStintHistoryData `json:"m_tyreStintsHistoryData"`
 }
 
-func (p *PacketSessionHistoryData) PacketHeader() Header {
+func (p PacketSessionHistoryData) PacketHeader() Header {
 	return &p.Header
 }
 

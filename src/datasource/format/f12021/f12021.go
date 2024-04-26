@@ -13,6 +13,7 @@ func MapBytes(b []byte, gateway listener.PacketGateway) bool {
 	header := readheader(b)
 
 	if header.Format() != 2021 {
+		fmt.Println("Unsupported packet format >> " + string(header.Format()))
 		return false
 	}
 
@@ -27,32 +28,53 @@ func callListener(p Packet, gateway listener.PacketGateway) {
 	switch reflect.TypeOf(p).String() {
 	case "*f12021.PacketSessionData":
 		gateway.OnSession(mapSession(p.(*PacketSessionData)))
+		break
 	case "*f12021.PacketButtons":
 		gateway.OnButton(mapButton(p.(*PacketButtons)))
+		break
 	case "*f12021.PacketParticipantsData":
 		gateway.OnParticipants(mapParticipants(p.(*PacketParticipantsData)))
+		break
 	case "*f12021.PacketCarSetupData":
 		gateway.OnCarSetupData(mapCarSetupData(p.(*PacketCarSetupData)))
+		break
 	case "*f12021.PacketLapData":
 		gateway.OnLapData(mapLapData(p.(*PacketLapData)))
+		break
 	case "*f12021.PacketMotionData":
 		gateway.OnMotionData(mapMotionData(p.(*PacketMotionData)))
+		break
 	case "*f12021.PacketCarTelemetryData":
 		gateway.OnTelemetryData(mapTelemetryData(p.(*PacketCarTelemetryData)))
-	case "*f12021.PacketSessionHistoryData":
-		gateway.OnSessionHistory(mapSessionHistory(p.(*PacketSessionHistoryData)))
+		break
+		/*	case "*f12021.PacketSessionHistoryData":
+			gateway.OnSessionHistory(mapSessionHistory(p.(PacketSessionHistoryData)))
+			break*/
 	case "*f12021.PacketCarDamageData":
 		gateway.OnCarDamage(mapCarDamage(p.(*PacketCarDamageData)))
+		break
 	case "*f12021.PacketPenalty":
 		mapPenalty(p.(*PacketPenalty))
-	//*f12021.StartLightsPacket
-	//*f12021.SpeedTrapPacket
+		break
+	case "*f12021.StartLightsPacket":
+		fmt.Println("case StartLightsPacket")
+		gateway.OnStartLight(mapStartLightPacket(p.(*StartLightsPacket)))
+		break
+	case "*f12021.PacketSessionHistoryData":
+	case "*f12021.SpeedTrapPacket":
+		break
 	default:
-		fmt.Println(reflect.TypeOf(p).String())
+		fmt.Println("Unhandled >> " + reflect.TypeOf(p).String())
 	}
 }
 
-func mapSession(pack *PacketSessionData) *data.Session {
+func mapStartLightPacket(packet *StartLightsPacket) data.StartLight {
+	return data.StartLight{
+		NumberOfLights: packet.NumLights,
+	}
+}
+
+func mapSession(pack *PacketSessionData) data.Session {
 	assist := data.SettingsAssist{
 		SteeringAssist:        pack.SteeringAssist,
 		BrakingAssist:         data.BrakingAssist(pack.BrakingAssist).String(),
@@ -71,7 +93,7 @@ func mapSession(pack *PacketSessionData) *data.Session {
 		TrackTemperature: pack.TrackTemperature,
 		Weather:          data.Weather(pack.Weather).String()}
 
-	return &data.Session{
+	return data.Session{
 		FrameId:         pack.Header.FrameIdentifier,
 		Assist:          assist,
 		Environment:     env,
@@ -83,11 +105,11 @@ func mapSession(pack *PacketSessionData) *data.Session {
 		GamePaused:      pack.GamePaused}
 }
 
-func mapButton(pack *PacketButtons) *data.Button {
-	return &data.Button{Status: pack.ButtonStatus}
+func mapButton(pack *PacketButtons) data.Button {
+	return data.Button{Status: pack.ButtonStatus}
 }
 
-func mapParticipants(pack *PacketParticipantsData) *data.Participants {
+func mapParticipants(pack *PacketParticipantsData) data.Participants {
 	drivers := make([]data.Driver, pack.NumActiveCars)
 
 	for i := 0; i < int(pack.NumActiveCars); i++ {
@@ -108,10 +130,10 @@ func mapParticipants(pack *PacketParticipantsData) *data.Participants {
 		drivers[i] = d
 	}
 
-	return &data.Participants{ActiveCarNum: pack.NumActiveCars, Drivers: drivers}
+	return data.Participants{ActiveCarNum: pack.NumActiveCars, Drivers: drivers}
 }
 
-func mapCarSetupData(pack *PacketCarSetupData) *data.CarSetups {
+func mapCarSetupData(pack *PacketCarSetupData) data.CarSetups {
 	setups := make([]data.CarSetup, len(pack.CarSetupData))
 
 	for i, _ := range pack.CarSetupData {
@@ -142,10 +164,10 @@ func mapCarSetupData(pack *PacketCarSetupData) *data.CarSetups {
 		setups[i] = setup
 	}
 
-	return &data.CarSetups{Setups: setups}
+	return data.CarSetups{Setups: setups}
 }
 
-func mapLapData(pack *PacketLapData) *data.LapDatas {
+func mapLapData(pack *PacketLapData) data.LapDatas {
 	datas := make([]data.LapData, len(pack.LapData))
 
 	for i, ld := range pack.LapData {
@@ -178,11 +200,11 @@ func mapLapData(pack *PacketLapData) *data.LapDatas {
 		datas[i] = data
 	}
 
-	return &data.LapDatas{Datas: datas}
+	return data.LapDatas{Datas: datas}
 }
 
-func mapMotionData(pack *PacketMotionData) *data.MotionData {
-	return &data.MotionData{
+func mapMotionData(pack *PacketMotionData) data.MotionData {
+	return data.MotionData{
 		SuspensionPosition:     pack.SuspensionPosition,
 		SuspensionVelocity:     pack.SuspensionVelocity,
 		SuspensionAcceleration: pack.SuspensionAcceleration,
@@ -199,7 +221,7 @@ func mapMotionData(pack *PacketMotionData) *data.MotionData {
 		AngularAccelerationZ:   pack.AngularAccelerationZ}
 }
 
-func mapTelemetryData(pack *PacketCarTelemetryData) *data.Telemetry {
+func mapTelemetryData(pack *PacketCarTelemetryData) data.Telemetry {
 	datas := make([]data.CarTelemetry, len(pack.CarTelemetryData))
 
 	for i, ct := range pack.CarTelemetryData {
@@ -224,13 +246,13 @@ func mapTelemetryData(pack *PacketCarTelemetryData) *data.Telemetry {
 		datas[i] = data
 	}
 
-	return &data.Telemetry{
+	return data.Telemetry{
 		FrameId:     pack.Header.FrameIdentifier,
 		Telemetries: datas}
 }
 
-func mapSessionHistory(pack *PacketSessionHistoryData) *data.SessionHistory {
-	return &data.SessionHistory{
+func mapSessionHistory(pack *PacketSessionHistoryData) data.SessionHistory {
+	return data.SessionHistory{
 		CarId:             pack.CarIdx,
 		NumLaps:           pack.NumLaps,
 		BestLapTimeLapNum: pack.BestLapTimeLapNum,
@@ -306,5 +328,5 @@ func mapCarDamage(pack *PacketCarDamageData) data.CarDamages {
 }
 
 func mapPenalty(pack *PacketPenalty) {
-	fmt.Println(pack.InfringementType)
+	fmt.Println("InfringementType >> " + string(pack.InfringementType))
 }

@@ -97,9 +97,9 @@ func selectEvent(buf []byte) Packet {
 	return resultPacket
 }
 
-func fillPacket(buf []byte, pack any) error {
+func fillPacket(buf []byte, packet any) error {
 	reader := bytes.NewReader(buf)
-	if err := binary.Read(reader, binary.LittleEndian, pack); err != nil {
+	if err := binary.Read(reader, binary.LittleEndian, packet); err != nil {
 		return err
 	}
 

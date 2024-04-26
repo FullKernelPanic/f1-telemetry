@@ -30,6 +30,6 @@ type CarSetupData struct {
 	FuelLoad               float32 `json:"m_fuelLoad"`               // Fuel load
 }
 
-func (p *PacketCarSetupData) PacketHeader() Header {
+func (p PacketCarSetupData) PacketHeader() Header {
 	return &p.Header
 }

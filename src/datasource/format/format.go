@@ -11,6 +11,6 @@ func MapData(buf []byte, gateway listener.PacketGateway) {
 	ok := f12021.MapBytes(buf, gateway)
 
 	if !ok {
-		log.Println("Unsupported packet!", buf)
+		log.Println("Unsupported packet!", string(buf))
 	}
 }

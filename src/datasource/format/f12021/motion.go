@@ -26,7 +26,7 @@ type PacketMotionData struct {
 	FrontWheelsAngle float32 `json:"m_frontWheelsAngle"`
 }
 
-func (p *PacketMotionData) PacketHeader() Header {
+func (p PacketMotionData) PacketHeader() Header {
 	return &p.Header
 }
 

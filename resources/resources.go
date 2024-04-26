@@ -1,12 +1,13 @@
 package resources
 
 import (
+	"embed"
 	_ "embed"
 )
 
-//go:embed html/index.html
-var indexHtml string
+//go:embed html/*.gohtml
+var htmls embed.FS
 
-func IndexHtml() string {
-	return indexHtml
+func Htmls() embed.FS {
+	return htmls
 }
