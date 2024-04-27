@@ -17,7 +17,6 @@ class WebSocketHandler {
      */
     openHandler(data) {
         console.log("open!");
-        console.log(data);
     }
 
     /**

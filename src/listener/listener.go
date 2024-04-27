@@ -55,7 +55,6 @@ func (l Listener) OnCarDamage(data data.CarDamages) {
 }
 
 func (l Listener) OnStartLight(data data.StartLight) {
-	fmt.Println("OnStartLight")
 	l.broadcast("startLight", data)
 }
 

@@ -17,6 +17,18 @@ func (p *PacketHeader) Format() uint16 {
 	return p.PacketFormat
 }
 
+func (p *PacketHeader) MajorVersion() uint8 {
+	return p.GameMajorVersion
+}
+
+func (p *PacketHeader) MinorVersion() uint8 {
+	return p.GameMajorVersion
+}
+
+func (p *PacketHeader) PackVersion() uint8 {
+	return p.PacketVersion
+}
+
 func (p *PacketHeader) Id() uint8 {
 	return p.PacketId
 }

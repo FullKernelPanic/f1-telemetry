@@ -47,9 +47,6 @@ func callListener(p Packet, gateway listener.PacketGateway) {
 	case "*f12021.PacketCarTelemetryData":
 		gateway.OnTelemetryData(mapTelemetryData(p.(*PacketCarTelemetryData)))
 		break
-		/*	case "*f12021.PacketSessionHistoryData":
-			gateway.OnSessionHistory(mapSessionHistory(p.(PacketSessionHistoryData)))
-			break*/
 	case "*f12021.PacketCarDamageData":
 		gateway.OnCarDamage(mapCarDamage(p.(*PacketCarDamageData)))
 		break
@@ -57,10 +54,11 @@ func callListener(p Packet, gateway listener.PacketGateway) {
 		mapPenalty(p.(*PacketPenalty))
 		break
 	case "*f12021.StartLightsPacket":
-		fmt.Println("case StartLightsPacket")
 		gateway.OnStartLight(mapStartLightPacket(p.(*StartLightsPacket)))
 		break
 	case "*f12021.PacketSessionHistoryData":
+		gateway.OnSessionHistory(mapSessionHistory(p.(*PacketSessionHistoryData)))
+		break
 	case "*f12021.SpeedTrapPacket":
 		break
 	default:
@@ -69,8 +67,12 @@ func callListener(p Packet, gateway listener.PacketGateway) {
 }
 
 func mapStartLightPacket(packet *StartLightsPacket) data.StartLight {
+	var numLights = packet.NumLights
+	if numLights > 5 {
+		numLights = 0
+	}
 	return data.StartLight{
-		NumberOfLights: packet.NumLights,
+		NumberOfLights: numLights,
 	}
 }
 

@@ -1,6 +1,6 @@
-
 class UI {
     _refreshInterval
+    _lights = 0;
 
     constructor() {
         this.setRefreshRate(3000)
@@ -8,25 +8,16 @@ class UI {
     }
 
     renderLights(num) {
-        let lamps = document.querySelectorAll("#lamp-container circle");
-
-        for (let i = 0; i < 5; i++) {
-            if (i <= num - 1) {
-                lamps[i].classList.remove("off");
-                lamps[i].classList.add("on");
-            } else {
-                lamps[i].classList.remove("on");
-                lamps[i].classList.add("off");
-            }
-        }
+        let lights = document.getElementsByTagName("start-lights")[0];
+        lights.setAttribute("lights", num);
     }
 
-    setRefreshRate(milliseconds){
+    setRefreshRate(milliseconds) {
         setInterval(this._refreshInterval);
         setInterval(() => this.render(), milliseconds);
     }
 
-    render(){
+    render() {
         console.log("render")
     }
 
@@ -34,11 +25,9 @@ class UI {
         const ctx = document.getElementById('myChart');
 
         new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: '# of Votes',
                     data: [12, 19, 3, 5, 2, 3],
                     borderWidth: 1
                 }]
