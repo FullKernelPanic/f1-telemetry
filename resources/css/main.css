@@ -1,0 +1,8 @@
+#lamp-container circle.off {
+    fill: #363636;
+}
+
+#lamp-container circle.on {
+    fill: #EE1111;
+}
+
