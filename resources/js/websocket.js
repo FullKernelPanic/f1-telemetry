@@ -1,21 +1,41 @@
-class WebSocketHandler {
+class TelemetryEvent extends Event {
+    /** @property {Object} data */
+    data;
+
+    constructor(type, data) {
+        super(type);
+        this.data = data;
+    }
+}
+
+class WebSocketHandler extends EventTarget {
+    static buttonEvent = new TelemetryEvent('button');
+    static sessionEvent = new TelemetryEvent('session');
+    static carDamageEvent = new TelemetryEvent('carDamage');
+    static lapDataEvent = new TelemetryEvent('lapData');
+    static sessionHistoryEvent = new TelemetryEvent('sessionHistory');
+    static motionEvent = new TelemetryEvent('motion');
+    static telemetryEvent = new TelemetryEvent('telemetry');
+    static participantsEvent = new TelemetryEvent('participants');
+    static carSetupEvent = new TelemetryEvent('carSetup');
+    static startLightEvent = new TelemetryEvent('startLight');
+
     /**
      * @param {string} url
      * @param {UI} ui
      */
     constructor(url, ui) {
+        super();
+
         this.ui = ui
         this.ws = new WebSocket(url)
-        this.ws.addEventListener("open", this.openHandler.bind(this))
-        this.ws.addEventListener("close", this.closeHandler.bind(this))
-        this.ws.addEventListener("error", this.errorHandler.bind(this))
-        this.ws.addEventListener("message", this.messageHandler.bind(this))
+        this.ws.addEventListener("open", this.openHandler.bind(this));
+        this.ws.addEventListener("close", this.closeHandler.bind(this));
+        this.ws.addEventListener("error", this.errorHandler.bind(this));
+        this.ws.addEventListener("message", this.messageHandler.bind(this));
     }
 
-    /**
-     * @param {Event} data
-     */
-    openHandler(data) {
+    openHandler() {
         console.log("open!");
     }
 
@@ -41,47 +61,6 @@ class WebSocketHandler {
             return;
         }
 
-        switch (data.type) {
-            case "button":
-                break;
-            case "carDamage":
-                break;
-            case "sessionHistory":
-                break;
-            case "motion":
-                break;
-            case "telemetry":
-                break;
-            case "participants":
-                break;
-            case "lapData":
-                this.handleLapData(data);
-                break;
-            case "session":
-                this.handleSession(data)
-                break;
-            case "carSetup":
-                this.handleCarSetup(data)
-                break;
-            case "startLight":
-                this.handleStartLight(data)
-                break;
-            default:
-                console.log(data.type);
-        }
-    }
-
-    handleSession(data) {
-    }
-
-    handleCarSetup(data) {
-    }
-
-    handleLapData(data) {
-    }
-
-    handleStartLight(data) {
-        this.ui.renderLights(data.data.NumberOfLights);
+        this.dispatchEvent(new TelemetryEvent(data.type, data.data));
     }
 }
-

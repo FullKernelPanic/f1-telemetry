@@ -12,6 +12,15 @@ class UI {
         lights.setAttribute("lights", num);
     }
 
+    updateSession(data) {
+        document.getElementById("SummaryTrackName").innerHTML = data.TrackInfo.name;
+        document.getElementById("SummaryFormula").innerHTML = data.formula;
+        document.getElementById("SummarySessionType").innerHTML = data.sessionType;
+        document.getElementById("SummaryTotalLaps").innerHTML = data.TrackInfo.totalLaps;
+        document.getElementById("SummaryTemperature").innerHTML = data.environment.airTemperature + ' / ' + data.environment.trackTemperature;
+        document.getElementById("SummaryWeather").innerHTML = data.environment.weather;
+    }
+
     setRefreshRate(milliseconds) {
         setInterval(this._refreshInterval);
         setInterval(() => this.render(), milliseconds);

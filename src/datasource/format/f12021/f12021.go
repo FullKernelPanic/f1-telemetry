@@ -13,7 +13,6 @@ func MapBytes(b []byte, gateway listener.PacketGateway) bool {
 	header := readheader(b)
 
 	if header.Format() != 2021 {
-		fmt.Println("Unsupported packet format >> " + string(header.Format()))
 		return false
 	}
 
@@ -104,7 +103,19 @@ func mapSession(pack *PacketSessionData) data.Session {
 		Formula:         data.Formula(pack.Formula).String(),
 		SessionTimeLeft: pack.SessionTimeLeft,
 		SessionDuration: pack.SessionDuration,
-		GamePaused:      pack.GamePaused}
+		GamePaused:      pack.GamePaused,
+		TrackInfo:       trackInfo(pack),
+	}
+}
+
+func trackInfo(pack *PacketSessionData) data.TrackInfo {
+	track := data.Track(pack.TrackId)
+	return data.TrackInfo{
+		Id:          int8(track),
+		Name:        track.String(),
+		TotalLaps:   pack.TotalLaps,
+		TrackLength: pack.TrackLength,
+	}
 }
 
 func mapButton(pack *PacketButtons) data.Button {
@@ -173,7 +184,7 @@ func mapLapData(pack *PacketLapData) data.LapDatas {
 	datas := make([]data.LapData, len(pack.LapData))
 
 	for i, ld := range pack.LapData {
-		data := data.LapData{
+		dld := data.LapData{
 			CurrentLapTimeInMS:          ld.CurrentLapTimeInMS,
 			LastLapTimeInMS:             ld.LastLapTimeInMS,
 			Sector1TimeInMS:             ld.Sector1TimeInMS,
@@ -199,7 +210,7 @@ func mapLapData(pack *PacketLapData) data.LapDatas {
 			PitStopTimerInMS:            ld.PitStopTimerInMS,
 			PitStopShouldServePen:       ld.PitStopShouldServePen}
 
-		datas[i] = data
+		datas[i] = dld
 	}
 
 	return data.LapDatas{Datas: datas}
@@ -227,7 +238,7 @@ func mapTelemetryData(pack *PacketCarTelemetryData) data.Telemetry {
 	datas := make([]data.CarTelemetry, len(pack.CarTelemetryData))
 
 	for i, ct := range pack.CarTelemetryData {
-		data := data.CarTelemetry{
+		dct := data.CarTelemetry{
 			Speed:                   ct.Speed,
 			Throttle:                ct.Throttle,
 			Steer:                   ct.Steer,
@@ -245,7 +256,7 @@ func mapTelemetryData(pack *PacketCarTelemetryData) data.Telemetry {
 			TyresPressure:           ct.TyresPressure,
 			SurfaceType:             ct.SurfaceType}
 
-		datas[i] = data
+		datas[i] = dct
 	}
 
 	return data.Telemetry{
@@ -270,7 +281,6 @@ func mapLapHistory(lhd [100]LapHistoryData) []data.LapHistory {
 	result := make([]data.LapHistory, 0)
 
 	for _, lh := range lhd {
-		isValid := false
 		varlidSectors := make([]bool, 0)
 
 		result = append(result, data.LapHistory{
@@ -278,7 +288,7 @@ func mapLapHistory(lhd [100]LapHistoryData) []data.LapHistory {
 			Sector1TimeInMS: lh.Sector1TimeInMS,
 			Sector2TimeInMS: lh.Sector2TimeInMS,
 			Sector3TimeInMS: lh.Sector3TimeInMS,
-			IsValid:         isValid,
+			IsValid:         false,
 			ValidSectors:    varlidSectors,
 		})
 	}

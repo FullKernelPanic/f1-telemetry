@@ -55,22 +55,19 @@ func (s Weather) String() string {
 type Formula int
 
 const (
-	Modern  Formula = 0
-	Classic Formula = 1
-	F2      Formula = 2
-	F1      Formula = 3
+	F1Modern  Formula = 0
+	F1Classic Formula = 1
+	F2        Formula = 2
 )
 
 func (s Formula) String() string {
 	switch s {
-	case Modern:
+	case F1Modern:
 		return "F1 modern"
-	case Classic:
+	case F1Classic:
 		return "F1 classic"
 	case F2:
 		return "F2"
-	case F1:
-		return "F1 generic"
 	}
 
 	return "unknown"
@@ -112,11 +109,13 @@ const (
 	OSQ                SessionType = 9
 	R                  SessionType = 10
 	R2                 SessionType = 11
-	TimeTrial          SessionType = 13
+	TimeTrial          SessionType = 12
 )
 
 func (s SessionType) String() string {
 	switch s {
+	case Unknown:
+		return "Unknown"
 	case P1:
 		return "Practice 1"
 	case P2:
@@ -143,7 +142,7 @@ func (s SessionType) String() string {
 		return "Time Trial"
 	}
 
-	return "unknown"
+	return "N/A"
 }
 
 type TelemetryStatus uint8
@@ -162,4 +161,143 @@ func (s TelemetryStatus) String() string {
 	}
 
 	return "unknown"
+}
+
+type Track uint8
+
+const (
+	Melbourne        Track = 0
+	LeCastellet      Track = 1
+	Shanghai         Track = 2
+	Bahrain          Track = 3
+	Catalunya        Track = 4
+	Monaco           Track = 5
+	Montreal         Track = 6
+	Silverstone      Track = 7
+	Hockenheim       Track = 8
+	Hungaroring      Track = 9
+	Spa              Track = 10
+	Monza            Track = 11
+	Singapore        Track = 12
+	Suzuka           Track = 13
+	AbuDhabi         Track = 14
+	Texas            Track = 15
+	Brazil           Track = 16
+	Austria          Track = 17
+	Sochi            Track = 18
+	Mexico           Track = 19
+	Azerbaijan       Track = 20
+	SakhirShort      Track = 21
+	SilverstoneShort Track = 22
+	TexasShort       Track = 23
+	SuzukaShort      Track = 24
+	Hanoi            Track = 25
+	Zandvoort        Track = 26
+	Imola            Track = 27
+	Portimao         Track = 28
+	Jeddah           Track = 29
+	Miami            Track = 30
+)
+
+func (s Track) String() string {
+	var result = ""
+	switch s {
+	case Bahrain:
+		result = "Bahrain International Circuit"
+		break
+	case Jeddah:
+		result = "Jeddah Corniche Circuit"
+		break
+	case Melbourne:
+		result = "Albert Park Circuit"
+		break
+	case Imola:
+		result = "Autodromo Internazionale Enzo E Dino Ferrari"
+		break
+	case Miami:
+		result = "Miami International Autodrome"
+		break
+	case Catalunya:
+		result = "Circuit De Barcelona-Catalunya"
+		break
+	case Monaco:
+		result = "Circuit De Monaco"
+		break
+	case Azerbaijan:
+		result = "Baku City Circuit"
+		break
+	case Montreal:
+		result = "Circuit Gilles-Villeneuve"
+		break
+	case Silverstone:
+		result = "SilverStone Circuit"
+		break
+	case SilverstoneShort:
+		result = "Silverstone Circuit (Short)"
+		break
+	case Austria:
+		result = "Red Bull Ring"
+		break
+	case LeCastellet:
+		result = "Circuit Paul Ricard"
+		break
+	case Hungaroring:
+		result = "Hungaroring"
+		break
+	case Spa:
+		result = "Circuit De Spa-Francorchamps"
+		break
+	case Zandvoort:
+		result = "Circuit Zandvoort"
+		break
+	case Monza:
+		result = "Autodromo Nazionale Monza"
+		break
+	case Singapore:
+		result = "Marina Bay Street Circuit"
+		break
+	case Suzuka:
+		result = "Suzuka International Racing Course"
+		break
+	case SuzukaShort:
+		result = "Suzuka International Racing Course (Short)"
+		break
+	case Texas:
+		result = "Circuit Of The Americas"
+		break
+	case TexasShort:
+		result = "Circuit Of The Americas (Short)"
+		break
+	case Mexico:
+		result = "Autódromo Hermanos Rodríguez"
+		break
+	case Brazil:
+		result = "Autódromo José Carlos Pace"
+		break
+	case AbuDhabi:
+		result = "Yas Marina Circuit"
+		break
+	case Portimao:
+		result = "Algarve International Circuit"
+		break
+	case Shanghai:
+		result = "Shanghai International Circuit"
+		break
+	case Hockenheim:
+		result = "Hockenheim"
+		break
+	case Sochi:
+		result = "Sochi"
+		break
+	case SakhirShort:
+		result = "Sakhir (Short)"
+		break
+	case Hanoi:
+		result = "Hanoi"
+		break
+	default:
+		result = "N/A"
+	}
+
+	return result
 }

@@ -10,6 +10,7 @@ type Session struct {
 	SessionTimeLeft uint16         `json:"sessionTimeLeft"`
 	SessionDuration uint16         `json:"sessionDuration"`
 	GamePaused      bool           `json:"isGamePaused"`
+	TrackInfo       TrackInfo      `json:"TrackInfo"`
 }
 
 type StartLight struct {
@@ -61,7 +62,7 @@ type Environment struct {
 	Weather          string `json:"weather"`
 }
 
-type Track struct {
+type TrackInfo struct {
 	Id          int8   `json:"id"`
 	Name        string `json:"name"`
 	TotalLaps   uint8  `json:"totalLaps"`
