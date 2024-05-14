@@ -213,7 +213,7 @@ func mapLapData(pack *PacketLapData) data.LapDatas {
 		datas[i] = dld
 	}
 
-	return data.LapDatas{Datas: datas}
+	return data.LapDatas{FrameId: pack.Header.FrameIdentifier, Datas: datas}
 }
 
 func mapMotionData(pack *PacketMotionData) data.MotionData {

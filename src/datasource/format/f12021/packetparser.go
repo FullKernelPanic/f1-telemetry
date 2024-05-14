@@ -155,4 +155,5 @@ type Header interface {
 	MajorVersion() uint8
 	MinorVersion() uint8
 	PackVersion() uint8
+	GetPlayerCarIndex() uint8
 }

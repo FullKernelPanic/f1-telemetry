@@ -35,11 +35,50 @@
             <div id="SummaryWeather">Weather</div>
         </div>
     </details>
-    <div class="chart-container">
-        <section>
-            <canvas id="myChart"></canvas>
-        </section>
-    </div>
+    <section>
+        <select id="driver"></select>
+    </section>
+    <section>
+        <div class="grid">
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </section>
+    <section>
+        <fieldset>
+            <legend>Lap times</legend>
+            <table id="lapTimes">
+                <thead>
+                <tr>
+                    <th scope="col">Lap</th>
+                    <th scope="col">Sector 1</th>
+                    <th scope="col">Sector 2</th>
+                    <th scope="col">Sector 3</th>
+                    <th scope="col">Full</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="col">1</th>
+                    <th scope="col">00:23:59</th>
+                    <th scope="col">00:33:64</th>
+                    <th scope="col">00:29:26</th>
+                    <th scope="col">01:12:36</th>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th scope="row">Average</th>
+                    <td>9,126</td>
+                    <td>0.91</td>
+                    <td>341</td>
+                    <td>341</td>
+                </tr>
+                </tfoot>
+            </table>
+        </fieldset>
+    </section>
 </main>
 <footer>
     <div class="container">

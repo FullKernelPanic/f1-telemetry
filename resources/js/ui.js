@@ -1,10 +1,14 @@
 class UI {
     _refreshInterval
-    _lights = 0;
+    /** @property {Chart} _throttleChart */
+    _throttleChart
+
+    /** @property {Number} _lastFrame */
+    _lastFrame;
 
     constructor() {
-        this.setRefreshRate(3000)
-        this.demoChart()
+        this.setRefreshRate(3000);
+        this.demoChart();
     }
 
     renderLights(num) {
@@ -26,28 +30,72 @@ class UI {
         setInterval(() => this.render(), milliseconds);
     }
 
+    updateTelemetry(data) {
+        this.addData(this._throttleChart, data.frameId, "throttle", data.telemetries[19].throttle)
+        this.addData(this._throttleChart, data.frameId, "brake", data.telemetries[19].brake)
+    }
+
     render() {
-        console.log("render")
+        console.log("render");
+        this._throttleChart.update();
     }
 
     demoChart() {
         const ctx = document.getElementById('myChart');
 
-        new Chart(ctx, {
+        this._throttleChart = new Chart(ctx, {
             type: 'line',
             data: {
-                datasets: [{
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                }]
+                labels: [],
+                datasets: [
+                    {
+                        label: "throttle",
+                        spanGaps: true,
+                        data: [],
+                        borderWidth: 1
+                    },
+                    {
+                        label: "brake",
+                        spanGaps: true,
+                        data: [],
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
+                normalized: true,
+                maxRotation: 0,
+                minRotation: 0,
+                sampleSize: 1,
+                animation: false,
+                bezierCurve: false,
+                spanGaps: true,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        type: 'linear',
+                        min: 0,
+                        max: 1
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0 // default to disabled in all datasets
                     }
                 }
             }
         });
+    }
+
+    addData(chart, frame, datasetLabel, newData) {
+        if (this._lastFrame !== frame) {
+            this._lastFrame = frame;
+            chart.data.labels.push(frame);
+        }
+
+        for (let i = 0; i < chart.data.datasets.length; i++) {
+            if (chart.data.datasets[i].label === datasetLabel) {
+                chart.data.datasets[i].data.push(newData);
+            }
+        }
     }
 }

@@ -37,6 +37,10 @@ func (p *PacketHeader) FrameId() uint32 {
 	return p.FrameIdentifier
 }
 
+func (p *PacketHeader) GetPlayerCarIndex() uint8 {
+	return p.PlayerCarIndex
+}
+
 const (
 	Motion              uint8 = 0  // Contains all motion data for player’s car – only sent while player is in control
 	Session             uint8 = 1  // Data about the session – track, time left

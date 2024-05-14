@@ -44,7 +44,6 @@ class WebSocketHandler extends EventTarget {
      */
     closeHandler(data) {
         console.log("close!");
-        console.log(data);
     }
 
     errorHandler() {
