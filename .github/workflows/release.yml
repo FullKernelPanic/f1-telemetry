@@ -46,18 +46,19 @@ jobs:
           tar czf f1-telemetry.tar.gz f1-telemetry
 
       - name: Create Release
+        id: create_release
         run: |
           gh release create "$(echo "v0.0.1")" -t "Test release" --notes "$(echo "lorem ipsum")"
-#
-#      - name: Upload Release Asset
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }}
-#          asset_path: ./f1-telemetry.tar.gz
-#          asset_name: f1-telemetry.tar.gz
-#          asset_content_type: application/gzip
+
+      - name: Upload binary
+        run: |
+          RELEASE_URL=$(gh release upload ${{ steps.create_release.outputs.upload_url }})
+          echo "release_url=$RELEASE_URL" >> $GITHUB_OUTPUT
+
+      - name: Upload Release Asset
+        run: |
+          gh release upload ${{ steps.release_url.output.release_url}} f1-telemetry.tar.gz
+
 #
 #      - name: Set Release
 #        run: |
