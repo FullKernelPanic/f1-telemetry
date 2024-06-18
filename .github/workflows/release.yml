@@ -53,7 +53,7 @@ jobs:
 
       - name: Upload Release Asset
         run: |
-          gh release upload ${{ steps.release_url.outputs.release_url}} f1-telemetry.tar.gz
+          gh release upload ${{ steps.create_release.outputs.release_url}} f1-telemetry.tar.gz
 
 #
 #      - name: Set Release
