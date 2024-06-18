@@ -1,19 +1,25 @@
 name: Github Release
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  generate-release:
-    runs-on: ubuntu@latest
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5.0.1
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5.0.1
         with:
           # The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.
           go-version: '1.22.2'
-      - run: go version
-      - run: |
+
+      - name: Install GH cli
+        run: |
           GH_CLI_VERSION="2.49.2"
           # Download the GitHub CLI tarball for the specified version
           (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y))
@@ -24,9 +30,32 @@ jobs:
           sudo mv gh_${GH_CLI_VERSION}_linux_amd64/bin/gh /usr/local/bin/
           # Verify the installation
           gh --version
-      - run: go build main.go
-        
 
+      - name: Build
+        run: |
+          go build -o f1-telemetry
+
+      - name: Archive binary
+        run: |
+          tar czf f1-telemetry.tar.gz f1-telemetry
+
+      - name: Create Release
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+#      - name: Upload Release Asset
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: ./f1-telemetry.tar.gz
+#          asset_name: f1-telemetry.tar.gz
+#          asset_content_type: application/gzip
+#
 #      - name: Set Release
 #        run: |
 #          RELEASE_BODY="lorem ipsum dolor"
