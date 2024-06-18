@@ -48,11 +48,7 @@ jobs:
       - name: Create Release
         id: create_release
         run: |
-          gh release create "$(echo "v0.0.1")" -t "Test release" --notes "$(echo "lorem ipsum")"
-
-      - name: Upload binary
-        run: |
-          RELEASE_URL=$(gh release upload ${{ steps.create_release.outputs.upload_url }})
+          RELEASE_URL=$(gh release create "$(echo "v0.0.1")" -t "Test release" --notes "$(echo "lorem ipsum")")
           echo "release_url=$RELEASE_URL" >> $GITHUB_OUTPUT
 
       - name: Upload Release Asset
