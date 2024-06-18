@@ -43,12 +43,13 @@ jobs:
         run: |
           tar czf f1-telemetry.tar.gz f1-telemetry
 
-#      - name: Create Release
-#        with:
-#          tag_name: ${{ github.ref }}
-#          release_name: Release ${{ github.ref }}
-#          draft: false
-#          prerelease: false
+      - name: Create Release
+        with:
+          tag_name: v0.0.1
+          release_name: Release v0.0.1 
+          #${{ github.ref }}
+          draft: false
+          prerelease: false
 #
 #      - name: Upload Release Asset
 #        uses: actions/upload-release-asset@v1
