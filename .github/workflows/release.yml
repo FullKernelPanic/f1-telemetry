@@ -33,6 +33,7 @@ jobs:
 
       - name: Build
         run: |
+          go version
           go build -o f1-telemetry
 
       - name: Archive binary
