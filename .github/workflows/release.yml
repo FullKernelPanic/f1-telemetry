@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,15 +46,13 @@ jobs:
           tar czf f1-telemetry.tar.gz f1-telemetry
 
       - name: Create Release
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$(echo "v0.0.1")" -t "Test release" --notes "$(echo "lorem ipsum")"
 #
 #      - name: Upload Release Asset
 #        uses: actions/upload-release-asset@v1
 #        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 #        with:
 #          upload_url: ${{ steps.create_release.outputs.upload_url }}
 #          asset_path: ./f1-telemetry.tar.gz
