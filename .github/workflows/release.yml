@@ -55,7 +55,7 @@ jobs:
 
       - name: Upload Release Asset
         run: |
-          gh release upload v0.0.1 f1-telemetry.tar.gz
+          gh release upload v0.0.1 f1-telemetry.tar.gz f1-telemetry.zip
 
 #
 #      - name: Set Release
