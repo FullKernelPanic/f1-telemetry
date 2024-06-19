@@ -40,10 +40,12 @@ jobs:
         run: |
           go version
           go build -o f1-telemetry
+          env GOOS=windows GOARCH=amd64 go build -o f1-telemetry.exe
 
       - name: Archive binary
         run: |
           tar czf f1-telemetry.tar.gz f1-telemetry
+          zip f1-telemetry.zip f1-telemetry.exe
 
       - name: Create Release
         id: create_release
