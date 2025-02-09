@@ -157,3 +157,41 @@ type Header interface {
 	PackVersion() uint8
 	GetPlayerCarIndex() uint8
 }
+
+/**
+*f12021.PacketLapData
+*f12021.PacketMotionData
+*f12021.PacketCarTelemetryData
+*f12021.PacketCarSetupData
+*f12021.PacketSessionHistoryData
+*f12021.FastestLapPacket
+Unhandled >> *f12021.FastestLapPacket
+*f12021.PacketSessionHistoryData
+*f12021.PacketLapData
+*f12021.PacketMotionData
+*f12021.PacketCarTelemetryData
+*f12021.PacketCarSetupData
+*f12021.PacketSessionHistoryData
+*f12021.PacketSessionHistoryData
+*f12021.PacketLapData
+*f12021.PacketMotionData
+*f12021.PacketCarTelemetryData
+*f12021.PacketCarSetupData
+*f12021.PacketSessionHistoryData
+*f12021.PacketSessionHistoryData
+*f12021.PacketLapData
+*f12021.PacketMotionData
+*f12021.PacketCarTelemetryData
+*f12021.PacketCarSetupData
+*f12021.PacketSessionHistoryData
+*f12021.PacketSessionHistoryData
+*f12021.PacketLapData
+*f12021.PacketMotionData
+*f12021.PacketCarTelemetryData
+*f12021.PacketCarSetupData
+*f12021.PacketSessionHistoryData
+*f12021.PacketSessionData
+*f12021.PacketParticipantsData
+*f12021.PacketCarSetupData
+
+*/

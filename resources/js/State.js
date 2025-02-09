@@ -9,15 +9,19 @@ const TelemetryType = {
 
 
 class State {
-
     /**
-     * @property {Driver[]} _drivers
      * @private
      */
-    _drivers
+    _drivers;
+
+    /**
+     * @private
+     */
+    _driverPositions;
 
     constructor() {
         this._drivers = new Drivers();
+        this._driverPositions = new DriverPositions(this._drivers);
     }
 
     /**
@@ -25,6 +29,36 @@ class State {
      */
     drivers() {
         return this._drivers;
+    }
+
+    /**
+     * @returns {DriverPositions}
+     */
+    driverPositions() {
+        return this._driverPositions;
+    }
+}
+
+class DriverPositions {
+    _data;
+
+    constructor() {
+        this._data = [];
+    }
+
+    update(data) {
+        console.log('update');
+        for (let i = 0; i < data.lapDatas.length; i++) {
+            if (!this._data[i]) {
+                this._data[i] = [data.lapDatas[i].carPosition];
+            }
+
+            this._data[i][data.lapDatas[i].currentLapNum] = data.lapDatas[i].carPosition;
+        }
+    }
+
+    all() {
+        return this._data;
     }
 }
 

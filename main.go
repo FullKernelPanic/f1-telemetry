@@ -31,7 +31,7 @@ func main() {
 	go handleDatasource(ds)
 
 	log.Println("App ready (" + util.IpAddress().String() + ")")
-
+	//util.Openbrowser("http://localhost:8080")
 	wg.Wait()
 }
 

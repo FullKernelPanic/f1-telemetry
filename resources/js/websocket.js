@@ -63,3 +63,21 @@ class WebSocketHandler extends EventTarget {
         this.dispatchEvent(new TelemetryEvent(data.type, data.data));
     }
 }
+
+
+//session
+//participants
+//carSetup
+//carDamage
+
+//lapData
+//motion
+//telemetry
+//carSetup
+
+//lapData
+//motion
+//telemetry
+//carSetup
+
+//lapData
