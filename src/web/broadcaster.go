@@ -1,4 +1,4 @@
-package domain
+package web
 
 type Broadcaster interface {
 	Broadcast(b []byte)

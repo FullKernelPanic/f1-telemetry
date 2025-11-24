@@ -1,32 +1,29 @@
 package datasource
 
 import (
+	"fmt"
 	"log"
-
-	"f1telemetry/src/datasource/format"
-	"f1telemetry/src/listener"
 )
 
-func NewDataSource(gateway listener.PacketGateway) DataSource {
-	conn, _ := CreateConnection("127.0.0.1", ":20777")
+func NewDataSource(port int) UDPTelemetry {
+	conn, _ := CreateConnection(fmt.Sprintf(":%v", port))
 
-	result := DataSource{conn, gateway}
+	result := UDPTelemetry{conn}
 
 	return result
 }
 
-type DataSource struct {
+type UDPTelemetry struct {
 	connection *Connection
-	gateway    listener.PacketGateway
 }
 
-func (d *DataSource) ReadPacket() {
+func (d *UDPTelemetry) ReadPacket() []byte {
 	buf, err := d.connection.Read()
 
 	if err != nil {
 		log.Println(err)
-		return
+		return make([]byte, 0)
 	}
 
-	format.MapData(buf, d.gateway)
+	return buf
 }

@@ -1,4 +1,4 @@
-package data
+package domain
 
 type Session struct {
 	FrameId         uint32         `json:"frameId"`
@@ -267,4 +267,14 @@ type CarDamage struct {
 	EngineICEWear        uint8      `json:"engineICEWear"`
 	EngineMGUKWear       uint8      `json:"engineMGUKWear"`
 	EngineTCWear         uint8      `json:"engineTCWear"`
+}
+
+type Penalty struct {
+	PenaltyType      uint8 `json:"penaltyType"`
+	InfringementType uint8 `json:"infringementType"`
+	VehicleIndex     uint8 `json:"vehicleIdx"`
+	OtherVehicleIdx  uint8 `json:"otherVehicleIdx"`
+	Time             uint8 `json:"time"`
+	LapNum           uint8 `json:"lapNum"`
+	PlacesGained     uint8 `json:"placesGained"`
 }

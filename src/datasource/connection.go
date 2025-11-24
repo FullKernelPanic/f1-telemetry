@@ -20,7 +20,7 @@ func (c *Connection) Read() ([]byte, error) {
 	return buf, nil
 }
 
-func CreateConnection(ip string, port string) (*Connection, error) {
+func CreateConnection(port string) (*Connection, error) {
 	protocol := "udp"
 
 	addr, err := net.ResolveUDPAddr(protocol, port)

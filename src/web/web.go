@@ -3,6 +3,7 @@ package web
 import (
 	"f1telemetry/resources"
 	"f1telemetry/src/util"
+	"fmt"
 	"log"
 	"math/rand"
 	"net"
@@ -19,7 +20,11 @@ type Server struct {
 }
 
 func (w *Server) ListenAndServe(port string) {
-	http.ListenAndServe(port, w.mux)
+	err := http.ListenAndServe(port, w.mux)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
 func CreateServer() *Server {
@@ -95,7 +100,7 @@ func (ws *Server) socketReaderCreate(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		err := recover()
 		if err != nil {
-			log.Println(err)
+			log.Fatal(fmt.Sprintf("WS ERROR: %v", err))
 		}
 		r.Body.Close()
 
@@ -115,6 +120,7 @@ type socketReader struct {
 
 func (ws *Server) Broadcast(data []byte) {
 	for _, g := range ws.savedsocketreader {
+		fmt.Println(fmt.Sprintf("sending data: %v", g.con.RemoteAddr().String()))
 		g.writeMsg(data)
 	}
 }
@@ -123,7 +129,7 @@ func (i *socketReader) writeMsg(data []byte) {
 	err := i.con.WriteMessage(websocket.TextMessage, data)
 
 	if err != nil {
-		log.Println(err.Error())
+		log.Println(fmt.Sprintf("Issue while broadcasting ws %v", err.Error()))
 	}
 }
 

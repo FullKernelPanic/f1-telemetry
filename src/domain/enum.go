@@ -1,4 +1,21 @@
-package data
+package domain
+
+type MessageType string
+
+const (
+	BUTTON_STATUS   MessageType = "button_status"
+	PARTICIPANTS    MessageType = "participants"
+	START_LIGHTS    MessageType = "start_lights"
+	SESSION         MessageType = "session"
+	CAR_SETUPS      MessageType = "car_setup"
+	LAP             MessageType = "lap_data"
+	MOTION          MessageType = "motion_data"
+	TELEMETRY       MessageType = "telemetry_data"
+	SESSION_HISTORY MessageType = "session_history"
+	CAR_DAMAGE      MessageType = "car_damage"
+	PENALTY_ISSUED  MessageType = "penalty"
+	CAR_STATUS      MessageType = "car_status"
+)
 
 type BrakingAssist uint8
 

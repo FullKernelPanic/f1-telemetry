@@ -16,7 +16,7 @@ class App {
     constructor(webSocketUrl) {
         this._state = new State();
 
-        this._ui = new UI();
+        this._ui = new UI(this._state);
 
         this._websocket = new WebSocketHandler(webSocketUrl, this._ui);
         this._websocket.addEventListener("button", this.onButton.bind(this));
@@ -26,6 +26,7 @@ class App {
         this._websocket.addEventListener("telemetry", this.onTelemetry.bind(this));
         this._websocket.addEventListener("participants", this.onParticipants.bind(this));
         this._websocket.addEventListener("lapData", this.onLapData.bind(this));
+        this._websocket.addEventListener("sessionHistory", this.onSessionHistory.bind(this));
 
         window.app = this;
     }
@@ -40,14 +41,15 @@ class App {
      * @param {TelemetryEvent} event
      */
     onLapData(event) {
-
+        this._state.driverPositions().update(event.data);
+        //this._ui.updateLapData(event.data);
     }
 
     /**
      * @param {TelemetryEvent} event
      */
     onParticipants(event) {
-        this._state.drivers().update([]);
+        this._state.drivers().update(event.data.drivers);
     }
 
     /**
@@ -71,7 +73,17 @@ class App {
         this._ui.renderLights(event.data.NumberOfLights);
     }
 
+    /**
+     * @param {TelemetryEvent} event
+     */
     onSession(event) {
         this._ui.updateSession(event.data);
+    }
+
+    /**
+     * @param {TelemetryEvent} event
+     */
+    onSessionHistory(event) {
+        //console.log(event.data);
     }
 }
