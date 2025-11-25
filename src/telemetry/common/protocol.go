@@ -1,4 +1,4 @@
-package versions
+package common
 
 import "f1telemetry/src/domain"
 

@@ -8,7 +8,7 @@ import (
 	"f1telemetry/src/listener"
 	"f1telemetry/src/logger"
 	"f1telemetry/src/telemetry"
-	"f1telemetry/src/telemetry/versions"
+	"f1telemetry/src/telemetry/common"
 	"f1telemetry/src/util"
 	"f1telemetry/src/web"
 	"fmt"
@@ -59,7 +59,7 @@ func handleWebsocket(l listener.Listener, s *web.Server, dataChan chan []byte) {
 
 	for {
 		data := <-dataChan
-		envelope := versions.MessageEnvelope{}
+		envelope := common.MessageEnvelope{}
 		DecodeFromBytes(data, &envelope)
 
 		switch envelope.Type {
@@ -117,7 +117,7 @@ func handleDatasource(ds datasource.UDPTelemetry, dataChan chan []byte) {
 	}
 }
 
-func EncodeToBytes(p *versions.MessageEnvelope) []byte {
+func EncodeToBytes(p *common.MessageEnvelope) []byte {
 	buf := bytes.Buffer{}
 	enc := gob.NewEncoder(&buf)
 	err := enc.Encode(p)

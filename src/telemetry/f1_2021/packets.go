@@ -1,7 +1,7 @@
 package f1_2021
 
 import (
-	"f1telemetry/src/telemetry/versions"
+	"f1telemetry/src/telemetry/common"
 )
 
 type PacketHeader struct {
@@ -71,7 +71,7 @@ type PacketMotionData struct {
 	FrontWheelsAngle float32 `json:"m_frontWheelsAngle"`
 }
 
-func (p PacketMotionData) PacketHeader() versions.Header {
+func (p PacketMotionData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -149,7 +149,7 @@ type PacketSessionData struct {
 	DynamicRacingLineType  uint8  `json:"m_dynamicRacingLineType"`  // 0 = 2D, 1 = 3D
 }
 
-func (p PacketSessionData) PacketHeader() versions.Header {
+func (p PacketSessionData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -175,7 +175,7 @@ type PacketLapData struct {
 	LapData [22]LapData `json:"m_lapData"` // Lap data for all cars on track
 }
 
-func (p PacketLapData) PacketHeader() versions.Header {
+func (p PacketLapData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -211,7 +211,7 @@ type PacketEventData struct {
 	EventStringCode [4]uint8     `json:"m_eventStringCode"` // Event string code, see below
 }
 
-func (p PacketEventData) PacketHeader() versions.Header {
+func (p PacketEventData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -286,47 +286,47 @@ type PacketButtons struct {
 	ButtonStatus uint32          `json:"m_buttonStatus"` // Bit flags specifying which buttons are being pressed currently - see appendices
 }
 
-func (p SpeedTrapPacket) PacketHeader() versions.Header {
+func (p SpeedTrapPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p FlashbackPacket) PacketHeader() versions.Header {
+func (p FlashbackPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p PacketPenalty) PacketHeader() versions.Header {
+func (p PacketPenalty) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p StopGoPenaltyServedPacket) PacketHeader() versions.Header {
+func (p StopGoPenaltyServedPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p DriveThroughPenaltyServedPacket) PacketHeader() versions.Header {
+func (p DriveThroughPenaltyServedPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p StartLightsPacket) PacketHeader() versions.Header {
+func (p StartLightsPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p RaceWinnerPacket) PacketHeader() versions.Header {
+func (p RaceWinnerPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p TeamMateInPitsPacket) PacketHeader() versions.Header {
+func (p TeamMateInPitsPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p FastestLapPacket) PacketHeader() versions.Header {
+func (p FastestLapPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p PacketButtons) PacketHeader() versions.Header {
+func (p PacketButtons) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
-func (p RetirementPacket) PacketHeader() versions.Header {
+func (p RetirementPacket) PacketHeader() common.Header {
 	return &p.EventData.Header
 }
 
@@ -336,7 +336,7 @@ type PacketParticipantsData struct {
 	ParticipantData [22]ParticipantData `json:"m_participants"`
 }
 
-func (p PacketParticipantsData) PacketHeader() versions.Header {
+func (p PacketParticipantsData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -382,7 +382,7 @@ type CarSetupData struct {
 	FuelLoad               float32 `json:"m_fuelLoad"`               // Fuel load
 }
 
-func (p PacketCarSetupData) PacketHeader() versions.Header {
+func (p PacketCarSetupData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -391,7 +391,7 @@ type PacketCarStatus struct {
 	CarStatusData [22]CarStatusData `json:"m_carStatusData"`
 }
 
-func (p PacketCarStatus) PacketHeader() versions.Header {
+func (p PacketCarStatus) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -428,7 +428,7 @@ type PacketFinalClassificationData struct {
 	FinalClassificationData [22]FinalClassificationData `json:"m_classificationData"`
 }
 
-func (p *PacketFinalClassificationData) PacketHeader() versions.Header {
+func (p *PacketFinalClassificationData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -456,7 +456,7 @@ type PacketLobbyInfoData struct {
 	LobbyPlayers [22]LobbyInfoData `json:"m_lobbyPlayers"`
 }
 
-func (p *PacketLobbyInfoData) PacketHeader() versions.Header {
+func (p *PacketLobbyInfoData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -496,7 +496,7 @@ type CarDamageData struct {
 	EngineTCWear         uint8      `json:"m_engineTCWear"`         // Engine wear TC (percentage)
 }
 
-func (p PacketCarDamageData) PacketHeader() versions.Header {
+func (p PacketCarDamageData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -513,7 +513,7 @@ type PacketSessionHistoryData struct {
 	TyreStintHistoryData [8]TyreStintHistoryData `json:"m_tyreStintsHistoryData"`
 }
 
-func (p PacketSessionHistoryData) PacketHeader() versions.Header {
+func (p PacketSessionHistoryData) PacketHeader() common.Header {
 	return &p.Header
 }
 
@@ -539,7 +539,7 @@ type PacketCarTelemetryData struct {
 	SuggestedGear                int8                 `json:"m_suggestedGear"`                // Suggested gear for the player (1-8), 0 if no gear suggested
 }
 
-func (p PacketCarTelemetryData) PacketHeader() versions.Header {
+func (p PacketCarTelemetryData) PacketHeader() common.Header {
 	return &p.Header
 }
 

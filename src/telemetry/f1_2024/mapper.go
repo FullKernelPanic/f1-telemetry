@@ -1,87 +1,86 @@
-package mapper
+package f1_2024
 
 import (
 	"bytes"
 	"f1telemetry/src/domain"
-	"f1telemetry/src/telemetry/versions"
-	"f1telemetry/src/telemetry/versions/f1_2021"
+	"f1telemetry/src/telemetry/common"
 )
 
-func Map2021(envelop *versions.PacketEnvelop) *versions.MessageEnvelope {
+func Map2024(envelop *common.PacketEnvelop) *common.MessageEnvelope {
 	switch envelop.EventType {
-	case f1_2021.F12021_BUTTON_STATUS:
-		return &versions.MessageEnvelope{
+	case F12024_BUTTON_STATUS:
+		return &common.MessageEnvelope{
 			Type: domain.BUTTON_STATUS,
-			Data: mapButtonData2021(envelop.Packet.(*f1_2021.PacketButtons)),
+			Data: mapButtonData2024(envelop.Packet.(*PacketButtons)),
 		}
-	case f1_2021.F12021_PARTICIPANTS:
-		return &versions.MessageEnvelope{
+	case F12024_PARTICIPANTS:
+		return &common.MessageEnvelope{
 			Type: domain.PARTICIPANTS,
-			Data: mapParticipantsData2021(envelop.Packet.(*f1_2021.PacketParticipantsData)),
+			Data: mapParticipantsData2024(envelop.Packet.(*PacketParticipantsData)),
 		}
-	case f1_2021.F12021_START_LIGHTS:
-		return &versions.MessageEnvelope{
+	case F12024_START_LIGHTS:
+		return &common.MessageEnvelope{
 			Type: domain.START_LIGHTS,
-			Data: mapStartLightPacket(envelop.Packet.(*f1_2021.StartLightsPacket)),
+			Data: mapStartLightPacket2024(envelop.Packet.(*StartLightsPacket)),
 		}
-	case f1_2021.F12021_LIGHTS_OUT:
-		return &versions.MessageEnvelope{
+	case F12024_LIGHTS_OUT:
+		return &common.MessageEnvelope{
 			Type: domain.START_LIGHTS,
-			Data: mapStartLightPacket(envelop.Packet.(*f1_2021.StartLightsPacket)),
+			Data: mapStartLightPacket2024(envelop.Packet.(*StartLightsPacket)),
 		}
-	case f1_2021.F12021_SESSION:
-		return &versions.MessageEnvelope{
+	case F12024_SESSION:
+		return &common.MessageEnvelope{
 			Type: domain.SESSION,
-			Data: mapSession(envelop.Packet.(*f1_2021.PacketSessionData)),
+			Data: mapSession2024(envelop.Packet.(*PacketSessionData)),
 		}
-	case f1_2021.F12021_CARSETUP:
-		return &versions.MessageEnvelope{
+	case F12024_CARSETUP:
+		return &common.MessageEnvelope{
 			Type: domain.CAR_SETUPS,
-			Data: mapCarSetupData(envelop.Packet.(*f1_2021.PacketCarSetupData)),
+			Data: mapCarSetupData2024(envelop.Packet.(*PacketCarSetupData)),
 		}
-	case f1_2021.F12021_LAP:
-		return &versions.MessageEnvelope{
+	case F12024_LAP:
+		return &common.MessageEnvelope{
 			Type: domain.LAP,
-			Data: mapLapData(envelop.Packet.(*f1_2021.PacketLapData)),
+			Data: mapLapData2024(envelop.Packet.(*PacketLapData)),
 		}
-	case f1_2021.F12021_MOTION:
-		return &versions.MessageEnvelope{
+	case F12024_MOTION:
+		return &common.MessageEnvelope{
 			Type: domain.MOTION,
-			Data: mapMotionData(envelop.Packet.(*f1_2021.PacketMotionData)),
+			Data: mapMotionData2024(envelop.Packet.(*PacketMotionData)),
 		}
-	case f1_2021.F12021_CARTELEMETRY:
-		return &versions.MessageEnvelope{
+	case F12024_CARTELEMETRY:
+		return &common.MessageEnvelope{
 			Type: domain.TELEMETRY,
-			Data: mapTelemetryData(envelop.Packet.(*f1_2021.PacketCarTelemetryData)),
+			Data: mapTelemetryData2024(envelop.Packet.(*PacketCarTelemetryData)),
 		}
-	case f1_2021.F12021_SESSIONHISTORY:
-		return &versions.MessageEnvelope{
+	case F12024_SESSIONHISTORY:
+		return &common.MessageEnvelope{
 			Type: domain.SESSION_HISTORY,
-			Data: mapSessionHistory(envelop.Packet.(*f1_2021.PacketSessionHistoryData)),
+			Data: mapSessionHistory2024(envelop.Packet.(*PacketSessionHistoryData)),
 		}
-	case f1_2021.F12021_CARDAMAGE:
-		return &versions.MessageEnvelope{
+	case F12024_CARDAMAGE:
+		return &common.MessageEnvelope{
 			Type: domain.CAR_DAMAGE,
-			Data: mapCarDamage(envelop.Packet.(*f1_2021.PacketCarDamageData)),
+			Data: mapCarDamage2024(envelop.Packet.(*PacketCarDamageData)),
 		}
-	case f1_2021.F12021_PENALTY_ISSUED:
-		return &versions.MessageEnvelope{
+	case F12024_PENALTY_ISSUED:
+		return &common.MessageEnvelope{
 			Type: domain.PENALTY_ISSUED,
-			Data: mapPenalty(envelop.Packet.(*f1_2021.PacketPenalty)),
+			Data: mapPenalty2024(envelop.Packet.(*PacketPenalty)),
 		}
 	default:
 		return nil
 	}
 }
 
-func mapButtonData2021(packet *f1_2021.PacketButtons) domain.Button {
+func mapButtonData2024(packet *PacketButtons) domain.Button {
 	return domain.Button{
 		Status:  packet.ButtonStatus,
 		FrameId: packet.PacketHeader().FrameId(),
 	}
 }
 
-func mapParticipantsData2021(pack *f1_2021.PacketParticipantsData) domain.Participants {
+func mapParticipantsData2024(pack *PacketParticipantsData) domain.Participants {
 	drivers := make([]domain.Driver, pack.NumActiveCars)
 
 	for i := 0; i < int(pack.NumActiveCars); i++ {
@@ -95,7 +94,7 @@ func mapParticipantsData2021(pack *f1_2021.PacketParticipantsData) domain.Partic
 			TeamId:          p.TeamId,
 			IsTeamMate:      p.MyTeam,
 			RaceNumber:      p.RaceNumber,
-			Nationality:     countryCodeById(p.Nationality),
+			Nationality:     countryCodeById2024(p.Nationality),
 			Name:            string(nameBytes),
 			TelemetryStatus: domain.TelemetryStatus(p.YourTelemetry).String()}
 
@@ -105,7 +104,7 @@ func mapParticipantsData2021(pack *f1_2021.PacketParticipantsData) domain.Partic
 	return domain.Participants{ActiveCarNum: pack.NumActiveCars, Drivers: drivers}
 }
 
-func mapStartLightPacket(packet *f1_2021.StartLightsPacket) domain.StartLight {
+func mapStartLightPacket2024(packet *StartLightsPacket) domain.StartLight {
 	var numLights = packet.NumLights
 	if numLights > 5 {
 		numLights = 0
@@ -115,7 +114,7 @@ func mapStartLightPacket(packet *f1_2021.StartLightsPacket) domain.StartLight {
 	}
 }
 
-func mapSession(pack *f1_2021.PacketSessionData) domain.Session {
+func mapSession2024(pack *PacketSessionData) domain.Session {
 	assist := domain.SettingsAssist{
 		SteeringAssist:        pack.SteeringAssist,
 		BrakingAssist:         domain.BrakingAssist(pack.BrakingAssist).String(),
@@ -144,11 +143,11 @@ func mapSession(pack *f1_2021.PacketSessionData) domain.Session {
 		SessionTimeLeft: pack.SessionTimeLeft,
 		SessionDuration: pack.SessionDuration,
 		GamePaused:      pack.GamePaused,
-		TrackInfo:       trackInfo(pack),
+		TrackInfo:       trackInfo2024(pack),
 	}
 }
 
-func trackInfo(pack *f1_2021.PacketSessionData) domain.TrackInfo {
+func trackInfo2024(pack *PacketSessionData) domain.TrackInfo {
 	track := domain.Track(pack.TrackId)
 	return domain.TrackInfo{
 		Id:          int8(track),
@@ -158,7 +157,7 @@ func trackInfo(pack *f1_2021.PacketSessionData) domain.TrackInfo {
 	}
 }
 
-func mapCarSetupData(pack *f1_2021.PacketCarSetupData) domain.CarSetups {
+func mapCarSetupData2024(pack *PacketCarSetupData) domain.CarSetups {
 	setups := make([]domain.CarSetup, len(pack.CarSetupData))
 
 	for i, _ := range pack.CarSetupData {
@@ -192,15 +191,15 @@ func mapCarSetupData(pack *f1_2021.PacketCarSetupData) domain.CarSetups {
 	return domain.CarSetups{Setups: setups}
 }
 
-func mapLapData(pack *f1_2021.PacketLapData) domain.LapDatas {
+func mapLapData2024(pack *PacketLapData) domain.LapDatas {
 	datas := make([]domain.LapData, len(pack.LapData))
 
 	for i, ld := range pack.LapData {
 		dld := domain.LapData{
 			CurrentLapTimeInMS:          ld.CurrentLapTimeInMS,
 			LastLapTimeInMS:             ld.LastLapTimeInMS,
-			Sector1TimeInMS:             ld.Sector1TimeInMS,
-			Sector2TimeInMS:             ld.Sector2TimeInMS,
+			Sector1TimeInMS:             minutesPlusMillisUint16(ld.Sector1TimeMinutesPart, ld.Sector1TimeMSPart),
+			Sector2TimeInMS:             minutesPlusMillisUint16(ld.Sector2TimeMinutesPart, ld.Sector2TimeMSPart),
 			LapDistance:                 ld.LapDistance,
 			TotalDistance:               ld.TotalDistance,
 			SafetyCarDelta:              ld.SafetyCarDelta,
@@ -211,7 +210,7 @@ func mapLapData(pack *f1_2021.PacketLapData) domain.LapDatas {
 			Sector:                      ld.Sector,
 			CurrentLapInvalid:           ld.CurrentLapInvalid,
 			Penalties:                   ld.Penalties,
-			Warnings:                    ld.Warnings,
+			Warnings:                    ld.TotalWarnings,
 			NumUnservedDriveThroughPens: ld.NumUnservedDriveThroughPens,
 			NumUnservedStopGoPens:       ld.NumUnservedStopGoPens,
 			GridPosition:                ld.GridPosition,
@@ -228,7 +227,7 @@ func mapLapData(pack *f1_2021.PacketLapData) domain.LapDatas {
 	return domain.LapDatas{FrameId: pack.Header.FrameIdentifier, Datas: datas}
 }
 
-func mapMotionData(pack *f1_2021.PacketMotionData) domain.MotionData {
+func mapMotionData2024(pack *PacketMotionData) domain.MotionData {
 	return domain.MotionData{
 		SuspensionPosition:     pack.SuspensionPosition,
 		SuspensionVelocity:     pack.SuspensionVelocity,
@@ -246,7 +245,7 @@ func mapMotionData(pack *f1_2021.PacketMotionData) domain.MotionData {
 		AngularAccelerationZ:   pack.AngularAccelerationZ}
 }
 
-func mapTelemetryData(pack *f1_2021.PacketCarTelemetryData) domain.Telemetry {
+func mapTelemetryData2024(pack *PacketCarTelemetryData) domain.Telemetry {
 	datas := make([]domain.CarTelemetry, len(pack.CarTelemetryData))
 
 	for i, ct := range pack.CarTelemetryData {
@@ -276,7 +275,7 @@ func mapTelemetryData(pack *f1_2021.PacketCarTelemetryData) domain.Telemetry {
 		Telemetries: datas}
 }
 
-func mapSessionHistory(pack *f1_2021.PacketSessionHistoryData) domain.SessionHistory {
+func mapSessionHistory2024(pack *PacketSessionHistoryData) domain.SessionHistory {
 	return domain.SessionHistory{
 		CarId:             pack.CarIdx,
 		NumLaps:           pack.NumLaps,
@@ -284,12 +283,12 @@ func mapSessionHistory(pack *f1_2021.PacketSessionHistoryData) domain.SessionHis
 		BestSector1LapNum: pack.BestSector1LapNum,
 		BestSector2LapNum: pack.BestSector2LapNum,
 		BestSector3LapNum: pack.BestSector3LapNum,
-		LapHistory:        mapLapHistory(pack.LapHistoryData),
-		TyreStintHistory:  mapTyreStintHistory(pack.TyreStintHistoryData),
+		LapHistory:        mapLapHistory2024(pack.LapHistoryData),
+		TyreStintHistory:  mapTyreStintHistory2024(pack.TyreStintHistoryData),
 	}
 }
 
-func mapLapHistory(lhd [100]f1_2021.LapHistoryData) []domain.LapHistory {
+func mapLapHistory2024(lhd [100]LapHistoryData) []domain.LapHistory {
 	result := make([]domain.LapHistory, 0)
 
 	for _, lh := range lhd {
@@ -297,9 +296,9 @@ func mapLapHistory(lhd [100]f1_2021.LapHistoryData) []domain.LapHistory {
 
 		result = append(result, domain.LapHistory{
 			LapTimeInMS:     lh.LapTimeInMS,
-			Sector1TimeInMS: lh.Sector1TimeInMS,
-			Sector2TimeInMS: lh.Sector2TimeInMS,
-			Sector3TimeInMS: lh.Sector3TimeInMS,
+			Sector1TimeInMS: minutesPlusMillisUint16(lh.Sector1TimeMinutesPart, lh.Sector1TimeMSPart),
+			Sector2TimeInMS: minutesPlusMillisUint16(lh.Sector2TimeMinutesPart, lh.Sector2TimeMSPart),
+			Sector3TimeInMS: minutesPlusMillisUint16(lh.Sector3TimeMinutesPart, lh.Sector3TimeMSPart),
 			IsValid:         false,
 			ValidSectors:    varlidSectors,
 		})
@@ -308,7 +307,11 @@ func mapLapHistory(lhd [100]f1_2021.LapHistoryData) []domain.LapHistory {
 	return result
 }
 
-func mapTyreStintHistory(tsh [8]f1_2021.TyreStintHistoryData) []domain.TyreStintHistory {
+func minutesPlusMillisUint16(mins uint8, millis uint16) uint16 {
+	return uint16(uint32(mins)*60*1000 + uint32(millis))
+}
+
+func mapTyreStintHistory2024(tsh [8]TyreStintHistoryData) []domain.TyreStintHistory {
 	result := make([]domain.TyreStintHistory, 0)
 
 	for _, t := range tsh {
@@ -322,7 +325,7 @@ func mapTyreStintHistory(tsh [8]f1_2021.TyreStintHistoryData) []domain.TyreStint
 	return result
 }
 
-func mapCarDamage(pack *f1_2021.PacketCarDamageData) domain.CarDamages {
+func mapCarDamage2024(pack *PacketCarDamageData) domain.CarDamages {
 	cars := make([]domain.CarDamage, len(pack.CarDamageData))
 
 	for i, cd := range pack.CarDamageData {
@@ -351,7 +354,7 @@ func mapCarDamage(pack *f1_2021.PacketCarDamageData) domain.CarDamages {
 	return domain.CarDamages{Cars: cars}
 }
 
-func mapPenalty(pack *f1_2021.PacketPenalty) domain.Penalty {
+func mapPenalty2024(pack *PacketPenalty) domain.Penalty {
 	return domain.Penalty{
 		PenaltyType:      pack.PenaltyType,
 		InfringementType: pack.InfringementType,
@@ -363,15 +366,15 @@ func mapPenalty(pack *f1_2021.PacketPenalty) domain.Penalty {
 	}
 }
 
-func countryCodeById(id uint8) string {
-	if int(id) >= len(countries) {
+func countryCodeById2024(id uint8) string {
+	if int(id) >= len(countries2024) {
 		id = 0
 	}
 
-	return countries[id]
+	return countries2024[id]
 }
 
-var countries = [88]string{
+var countries2024 = [88]string{
 	"N/A",
 	"American",
 	"Argentinean",
